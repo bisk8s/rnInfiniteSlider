@@ -44,28 +44,33 @@ const ImageSlider = () => {
     };
   }, [panResponder]);
 
+  const children = images
+    .map((item, index) => {
+      const left = posX + index * 50;
+      const key = item.download_url + index;
+
+      if (left + 50 >= 0 && left <= 500) {
+        return (
+          <Image
+            key={key}
+            style={[styles.image, {left}]}
+            source={{uri: item.download_url}}
+          />
+        );
+      } else {
+        return null;
+      }
+    })
+    .filter(item => item !== null);
+
   return (
     <>
       <View>
-        <Text>Total de Imagens: {images.length}</Text>
+        <Text>Total de Imagens na Lista: {images.length}</Text>
+        <Text>Total de Imagens na Tela: {children.length}</Text>
       </View>
       <View style={[styles.content]} {...panResponder.panHandlers}>
-        {images.map((item, index) => {
-          const left = posX + index * 50;
-          const key = item.download_url + index;
-
-          if (left + 50 >= 0 && left <= 500) {
-            return (
-              <Image
-                key={key}
-                style={[styles.image, {left}]}
-                source={{uri: item.download_url}}
-              />
-            );
-          } else {
-            return <React.Fragment key={key} />;
-          }
-        })}
+        {children}
       </View>
     </>
   );
